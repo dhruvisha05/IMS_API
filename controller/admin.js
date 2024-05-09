@@ -2,6 +2,8 @@ var admin = require("../model/adminmodel");
 const storage = require('node-persist');
 storage.init( /* options ... */);
 const bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
+
 
 
 //admin register
@@ -41,9 +43,11 @@ exports.login = async (req, res) => {
             bcrypt.compare(req.body.password, data[0].password, async function (err, result) {
                 if (result == true) {
                     await storage.setItem('login-admin', data[0].id);
+                    const token = jwt.sign({ adminId: admin._id }, 'IMS', { expiresIn: '1h' });
                     res.status(200).json({
-                        status: "login success",
-                    });
+                        status:"Login Success",
+                        token
+                    })
                 } else {
                     res.status(200).json({
                         status: "check your email and password1",
@@ -61,6 +65,8 @@ exports.login = async (req, res) => {
         });
     }
 };
+
+
 
 //admin logout
 exports.logout = async (req, res) => {

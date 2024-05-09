@@ -8,6 +8,7 @@ var reference = require('../controller/reference');
 var followup = require('../controller/followup');
 var inquiry = require('../controller/inquiry');
 var course = require('../controller/course');
+var auth = require('../middleware/auth')
 
 const multer = require('multer');
 var storage = multer.diskStorage({
@@ -23,7 +24,7 @@ const upload = multer({ storage: storage })
 
 //admin
 adminrouter.post('/register',upload.single('image'),admin.register);
-adminrouter.get('/get_admindata',admin.get_admindata);
+adminrouter.get('/get_admindata',auth.check_token,admin.get_admindata);
 adminrouter.post('/admin_login',admin.login);
 adminrouter.get('/admin_logout',admin.logout);
 adminrouter.post('/admin_delete/:id',admin.admin_delete);
@@ -88,7 +89,5 @@ adminrouter.post('/inquiry_delete/:id',inquiry.inquiry_delete);
 adminrouter.post('/inquiry_update/:id',inquiry.inquiry_update);
 adminrouter.get('/inquiry_update/:id',inquiry.inquiry_update);
 adminrouter.get('/inquiry_search',inquiry.inquiry_search);
-
-
 
 module.exports = adminrouter;
