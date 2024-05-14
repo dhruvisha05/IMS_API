@@ -89,5 +89,6 @@ adminrouter.post('/inquiry_delete/:id',auth.check_token,inquiry.inquiry_delete);
 adminrouter.post('/inquiry_update/:id',auth.check_token,inquiry.inquiry_update);
 adminrouter.get('/inquiry_update/:id',auth.check_token,inquiry.inquiry_update);
 adminrouter.get('/inquiry_search',auth.check_token,inquiry.inquiry_search);
+adminrouter.post('/verify', inquiry.verify_inquiry);
 
 module.exports = adminrouter;

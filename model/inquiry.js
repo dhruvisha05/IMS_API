@@ -39,6 +39,16 @@ var InquirySchema = new mongoose.Schema ({
     },
     inquiry_date :{
         type:String,
+    },
+    email:{
+        type:String
+    },
+    otp:{
+        type:Number
+    },
+    verify:{
+        type:Boolean,
+        default:false
     }
 })
 module.exports = mongoose.model('inquiry', InquirySchema);

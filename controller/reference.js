@@ -5,16 +5,24 @@ storage.init( /* options ... */);
 //reference add
 exports.add_reference = async (req, res) => {
     const admin_id = await storage.getItem('login-admin');
-    if (admin_id) {
-        var data = await reference.create(req.body);
+    var reference_data = await reference.find({ "reference_name": req.body.reference_name });
+    if (reference_data.length == 1) {
         res.status(200).json({
-            status: "reference data added",
+            status: "reference is already Exist",
             data
         })
     } else {
-        res.status(200).json({
-            status: "only admin can add reference"
-        })
+        if (admin_id) {
+            var data = await reference.create(req.body);
+            res.status(200).json({
+                status: "reference data added",
+                data
+            })
+        } else {
+            res.status(200).json({
+                status: "only admin can add reference"
+            })
+        }
     }
 }
 
@@ -52,18 +60,26 @@ exports.reference_delete = async (req, res) => {
 //reference update
 exports.reference_update = async (req, res) => {
     const admin_id = await storage.getItem('login-admin');
-    if (admin_id) {
-        var id = req.params.id;
-        var data = await reference.findByIdAndUpdate(id, req.body);
+    var reference_data = await branch.find({ "reference_name": req.body.reference_name });
+    if (reference_data.length == 1) {
         res.status(200).json({
-            data,
-            status: "reference upadte"
-
+            status: "reference is already Exist",
+            data
         })
     } else {
-        res.stauts(200).json({
-            stauts: "only admin can update status"
-        })
+        if (admin_id) {
+            var id = req.params.id;
+            var data = await reference.findByIdAndUpdate(id, req.body);
+            res.status(200).json({
+                data,
+                status: "reference upadte"
+
+            })
+        } else {
+            res.stauts(200).json({
+                stauts: "only admin can update status"
+            })
+        }
     }
 }
 

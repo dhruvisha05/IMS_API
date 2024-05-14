@@ -5,16 +5,24 @@ storage.init( /* options ... */);
 //status register
 exports.add_status = async (req, res) => {
     const admin_id = await storage.getItem('login-admin');
-    if (admin_id) {
-        var data = await status.create(req.body);
+    var status_data = await status.find({ "status_name": req.body.status_name });
+    if (status_data.length == 1) {
         res.status(200).json({
-            status: "admin data register",
+            status: "status is already Exist",
             data
         })
     } else {
-        res.status(200).json({
-            status: "only admin can add status"
-        })
+        if (admin_id) {
+            var data = await status.create(req.body);
+            res.status(200).json({
+                status: "admin data register",
+                data
+            })
+        } else {
+            res.status(200).json({
+                status: "only admin can add status"
+            })
+        }
     }
 }
 
@@ -52,18 +60,26 @@ exports.status_delete = async (req, res) => {
 //status update
 exports.status_update = async (req, res) => {
     const admin_id = await storage.getItem('login-admin');
-    if (admin_id) {
-        var id = req.params.id;
-        var data = await status.findByIdAndUpdate(id, req.body);
+    var status_data = await status.find({ "status_name": req.body.status_name });
+    if (status_data.length == 1) {
         res.status(200).json({
-            data,
-            status: "status upadte"
-
+            status: "status is already Exist",
+            data
         })
     } else {
-        res.stauts(200).json({
-            stauts: "only admin can update status"
-        })
+        if (admin_id) {
+            var id = req.params.id;
+            var data = await status.findByIdAndUpdate(id, req.body);
+            res.status(200).json({
+                data,
+                status: "status upadte"
+
+            })
+        } else {
+            res.stauts(200).json({
+                stauts: "only admin can update status"
+            })
+        }
     }
 }
 
