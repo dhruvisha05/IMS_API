@@ -37,6 +37,7 @@ exports.add_inquiry = async (req,res) =>{
             status:" Insert inquiry",
             data
          })
+         await storage.setItem('id',data._id.toString());
 
 };
 
@@ -45,11 +46,15 @@ exports.verify_inquiry = async (req, res) => {
 
 
    const storedOTP = await storage.getItem('otp');
+   const id = await storage.getItem('id');
+
 
    if (storedOTP && storedOTP === otp) {
      
-       const updatedInquiry = await inquiry.findOneAndUpdate({verify : true});
+       const updatedInquiry = await inquiry.findByIdAndUpdate(id,{verify : true});
+    
 
+       
             
             await storage.clear();
 
